@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>塔罗占卜 · Tarot Reading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<style>
+button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem;}
+* { box-sizing: border-box;}
+:root{
+--bg:#f4eee1;
+--bg-soft:#ece3d0;
+--surface:#fffdf6;
+--surface-2:#faf4e6;
+--ink:#2b2436;
+--ink-soft:#5d5468;
+--ink-faint:#8a7f92;
+--gold:#9a7422;
+--gold-bright:#b98c2e;
+--gold-soft:#e7d9b4;
+--line:#ddd0b2;
+--card-back:#232038;
+--card-back-2:#17142a;
+--accent:#7a2e3a;
+--shadow:0 10px 30px rgba(59,45,20,.16);
+--radius:14px;
+}
+@media (prefers-color-scheme: dark){
+:root{
+--bg:#100e1a;
+--bg-soft:#17142a;
+--surface:#1b1830;
+--surface-2:#211d3a;
+--ink:#ede4cf;
+--ink-soft:#bdb098;
+--ink-faint:#8d8271;
+--gold:#c9a45c;
+--gold-bright:#e2c07a;
+--gold-soft:#3a3355;
+--line:#38325a;
+--card-back:#262148;
+--card-back-2:#191631;
+--accent:#d98a94;
+--shadow:0 12px 34px rgba(0,0,0,.5);
+}
+}
+html{ scroll-behavior:smooth;}
+body{
+margin:0;
+background:var(--bg);
+color:var(--ink);
+font-family:"Noto Serif SC","Songti SC",serif;
+line-height:1.65;
+-webkit-font-smoothing:antialiased;
+}
+.stars{
+position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+background-image:
+radial-gradient(1.5px 1.5px at 12% 22%, var(--gold) 50%, transparent 51%),
+radial-gradient(1px 1px at 84% 12%, var(--gold) 50%, transparent 51%),
+radial-gradient(1.2px 1.2px at 66% 34%, var(--gold) 50%, transparent 51%),
+radial-gradient(1px 1px at 30% 8%, var(--gold) 50%, transparent 51%),
+radial-gradient(1.4px 1.4px at 92% 46%, var(--gold) 50%, transparent 51%),
+radial-gradient(1px 1px at 5% 58%, var(--gold) 50%, transparent 51%),
+radial-gradient(1.2px 1.2px at 48% 16%, var(--gold) 50%, transparent 51%),
+radial-gradient(1px 1px at 74% 66%, var(--gold) 50%, transparent 51%);
+}
+.wrap{ position:relative; z-index:1; max-width:1060px; margin:0 auto; padding:28px 18px 64px;}
+.lang-switch{
+position:fixed; top:14px; right:14px; z-index:30; display:flex; align-items:center;
+background:var(--surface); border:1.5px solid var(--gold); border-radius:999px; overflow:hidden;
+box-shadow:var(--shadow);
+}
+.lang-switch button{
+border:0; background:transparent; color:var(--ink-soft); font-family:inherit; font-size:13.5px;
+padding:7px 14px; cursor:pointer; min-height:36px; letter-spacing:.04em;
+}
+.lang-switch button[aria-pressed="true"]{ background:var(--gold); color:#fff; font-weight:700;}
+@media (prefers-color-scheme: dark){.lang-switch button[aria-pressed="true"]{ color:#17142a;}}
+.cross-nav{ display:flex; justify-content:center; margin:16px 0 2px;}
+.cross-nav.bottom{ margin:24px 0 4px;}
+.cross-btn{
+display:inline-flex; align-items:center; gap:9px; text-decoration:none;
+font-family:inherit; font-size:15px; letter-spacing:.06em; font-weight:600;
+color:var(--ink); background:var(--surface); border:1.5px solid var(--gold);
+border-radius:999px; padding:10px 24px; min-height:44px; box-shadow:var(--shadow);
+}
+.cross-btn .cross-icon{ color:var(--gold); font-size:17px; line-height:1;}
+.cross-btn .cross-arrow{ color:var(--gold); font-size:15px; line-height:1;}
+.cross-btn:hover{ background:var(--gold); color:#fff; border-color:var(--gold-bright);}
+.cross-btn:hover .cross-icon,.cross-btn:hover .cross-arrow{ color:#fff;}
+@media (prefers-color-scheme: dark){
+.cross-btn:hover{ color:#17142a;}
+.cross-btn:hover .cross-icon,.cross-btn:hover .cross-arrow{ color:#17142a;}
+}
+header{ text-align:center; padding:18px 0 6px;}
+.moon{ font-size:26px; color:var(--gold); letter-spacing:.5em; text-indent:.5em;}
+h1{
+font-size:clamp(34px,6vw,52px); font-weight:900; margin:6px 0 2px; letter-spacing:.08em;
+}
+h1>.en{ display:block; font-family:"Cormorant Garamond",serif; font-size:clamp(13px,2.4vw,17px); font-weight:600; letter-spacing:.55em; text-indent:.55em; color:var(--gold); margin-top:6px; text-transform:uppercase;}
+.tagline{ color:var(--ink-soft); font-size:15px; margin:10px auto 0; max-width:520px;}
+.rule{ display:flex; align-items:center; gap:12px; max-width:420px; margin:20px auto 4px; color:var(--gold);}
+.rule::before,.rule::after{ content:""; flex:1; height:1px; background:var(--line);}
+.rule span{ font-size:13px;}
+section.panel{
+background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+box-shadow:var(--shadow); padding:22px; margin-top:22px;
+}
+.panel h2{ font-size:19px; margin:0 0 4px; font-weight:700; letter-spacing:.04em;}
+.hint{ color:var(--ink-faint); font-size:13px; margin:0 0 14px;}
+label.flabel{ display:block; font-size:13px; color:var(--ink-soft); margin-bottom:6px; letter-spacing:.06em;}
+textarea{
+width:100%; border:1px solid var(--line); border-radius:10px; background:var(--surface-2);
+color:var(--ink); font-family:inherit; font-size:16px; padding:12px 14px; resize:vertical; min-height:56px;
+}
+textarea:focus{ outline:2px solid var(--gold); outline-offset:1px;}
+.topics{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+.chip{
+border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+border-radius:999px; padding:6px 14px; font-family:inherit; font-size:13.5px; cursor:pointer; min-height:36px;
+}
+.chip:hover{ border-color:var(--gold); color:var(--ink);}
+.spreads{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.spread{
+text-align:left; border:1.5px solid var(--line); background:var(--surface-2); border-radius:12px;
+padding:14px 16px; cursor:pointer; font-family:inherit; color:var(--ink); min-height:44px;
+}
+.spread b{ display:block; font-size:16px; margin-bottom:2px;}
+.spread small{ color:var(--ink-faint); font-size:12.5px; line-height:1.5; display:block;}
+.spread[aria-pressed="true"]{ border-color:var(--gold); background:var(--surface); box-shadow:inset 0 0 0 1px var(--gold);}
+.spread[aria-pressed="true"] b{ color:var(--gold);}
+.opts{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:16px;}
+.toggle{
+border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft); border-radius:999px;
+padding:7px 16px; font-family:inherit; font-size:13.5px; cursor:pointer; min-height:38px;
+}
+.toggle[aria-pressed="true"]{ background:var(--gold); border-color:var(--gold); color:#fff;}
+@media (prefers-color-scheme: dark){.toggle[aria-pressed="true"]{ color:#17142a; font-weight:700;}}
+.stage{ text-align:center; padding:30px 22px 26px; overflow:hidden;}
+.deck-zone{ display:flex; justify-content:center; align-items:flex-end; gap:26px; flex-wrap:wrap;}
+.deck-stack{ position:relative; width:118px; height:178px; margin:6px auto 0;}
+.deck-card{
+position:absolute; inset:0; border-radius:10px;
+background:
+radial-gradient(circle at 50% 42%, rgba(201,164,92,.28) 0 26px, transparent 27px),
+repeating-radial-gradient(circle at 50% 42%, transparent 0 9px, rgba(201,164,92,.13) 9px 10px),
+linear-gradient(160deg, var(--card-back), var(--card-back-2));
+border:1.5px solid var(--gold);
+box-shadow:inset 0 0 0 5px var(--card-back-2), inset 0 0 0 6.5px var(--gold), 0 8px 20px rgba(0,0,0,.35);
+}
+.deck-card::after{
+content:"☾ ★ ☽"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+color:var(--gold-bright); font-size:19px; letter-spacing:.18em; text-indent:.18em;
+}
+.deck-card:nth-child(1){ transform:translate(-7px,5px) rotate(-4deg);}
+.deck-card:nth-child(2){ transform:translate(0,2px) rotate(1.5deg);}
+.deck-card:nth-child(3){ transform:translate(6px,-2px) rotate(4deg);}
+.deck-stack.shuffling>.deck-card:nth-child(1){ animation:shufL 0.55s ease-in-out infinite alternate;}
+.deck-stack.shuffling>.deck-card:nth-child(3){ animation:shufR 0.55s ease-in-out infinite alternate;}
+@keyframes shufL{ from{ transform:translate(-7px,5px) rotate(-4deg);} to{ transform:translate(-30px,-8px) rotate(-13deg);}}
+@keyframes shufR{ from{ transform:translate(6px,-2px) rotate(4deg);} to{ transform:translate(30px,-10px) rotate(13deg);}}
+.deck-count{ color:var(--ink-faint); font-size:13px; margin-top:12px; font-family:"Cormorant Garamond",serif; letter-spacing:.25em;}
+.stage-actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:20px;}
+.btn{
+font-family:inherit; font-size:16px; cursor:pointer; border-radius:999px; padding:11px 30px; min-height:48px;
+border:1.5px solid var(--gold); letter-spacing:.1em;
+}
+.btn.primary{ background:var(--gold); color:#fff; font-weight:700;}
+@media (prefers-color-scheme: dark){.btn.primary{ color:#17142a;}}
+.btn.primary:hover{ background:var(--gold-bright);}
+.btn.ghost{ background:transparent; color:var(--ink);}
+.btn.ghost:hover{ border-color:var(--gold-bright); color:var(--gold);}
+.btn:disabled{ opacity:.45; cursor:not-allowed;}
+.stage-status{ min-height:24px; color:var(--ink-soft); font-size:14px; margin-top:14px;}
+.ritual{ max-width:560px; margin:6px auto 0; color:var(--ink-faint); font-size:13.5px;}
+#resultSection{ display:none;}
+.drawn{ display:flex; flex-wrap:wrap; gap:18px; justify-content:center; margin-top:6px;}
+.slot{ width:168px; text-align:center;}
+.slot>.pos{ font-size:13px; letter-spacing:.3em; text-indent:.3em; color:var(--gold); margin-bottom:8px; font-weight:700;}
+.tcard{ perspective:1100px; width:168px; height:264px; margin:0 auto; cursor:pointer;}
+.tcard-inner{
+position:relative; width:100%; height:100%; transform-style:preserve-3d;
+transition:transform 0.8s cubic-bezier(.2,.7,.3,1);
+}
+.tcard.flipped>.tcard-inner{ transform:rotateY(180deg);}
+.face{
+position:absolute; inset:0; border-radius:12px; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+overflow:hidden;
+}
+.face.back{
+background:
+radial-gradient(circle at 50% 42%, rgba(201,164,92,.28) 0 30px, transparent 31px),
+repeating-radial-gradient(circle at 50% 42%, transparent 0 10px, rgba(201,164,92,.13) 10px 11px),
+linear-gradient(160deg, var(--card-back), var(--card-back-2));
+border:1.5px solid var(--gold);
+box-shadow:inset 0 0 0 5px var(--card-back-2), inset 0 0 0 6.5px var(--gold), var(--shadow);
+display:flex; align-items:center; justify-content:center; color:var(--gold-bright); font-size:22px; letter-spacing:.18em; text-indent:.18em;
+}
+.face.front{
+transform:rotateY(180deg); background:var(--surface); border:1.5px solid var(--gold);
+box-shadow:inset 0 0 0 4px var(--surface), inset 0 0 0 5px var(--gold-soft), var(--shadow);
+display:flex; flex-direction:column; align-items:center; padding:12px 8px 10px;
+}
+.face.front>.num{ font-family:"Cormorant Garamond",serif; font-size:15px; letter-spacing:.3em; text-indent:.3em; color:var(--gold); font-weight:700;}
+.face.front>.symbol{ flex:1; display:flex; align-items:center; justify-content:center; width:100%; color:var(--ink);}
+.face.front>.symbol>.glyph{ font-size:62px; line-height:1;}
+.face.front>.symbol>svg{ width:64px; height:84px;}
+.face.front.reversed-art>.symbol{ transform:rotate(180deg);}
+.face.front>.cname{ font-size:16.5px; font-weight:700; letter-spacing:.06em; text-align:center;}
+.face.front>.ename{ font-family:"Cormorant Garamond",serif; font-size:11.5px; letter-spacing:.14em; color:var(--ink-faint); text-transform:uppercase; margin-top:1px; text-align:center;}
+.slot>.under{ margin-top:10px; min-height:26px;}
+.badge{
+display:inline-block; font-size:12px; padding:2px 10px; border-radius:999px; letter-spacing:.15em;
+border:1px solid var(--gold); color:var(--gold); font-weight:700;
+}
+.badge.rev{ border-color:var(--accent); color:var(--accent);}
+.slot>.tap-hint{ font-size:12px; color:var(--ink-faint); margin-top:4px;}
+.reading-list{ display:flex; flex-direction:column; gap:0; margin-top:8px;}
+.reading-item{ padding:18px 2px; border-top:1px dashed var(--line);}
+.reading-item:first-child{ border-top:none; padding-top:6px;}
+.reading-item h3{ margin:0 0 2px; font-size:18px;}
+.reading-item>h3>.pos-tag{ color:var(--gold); font-size:13px; letter-spacing:.2em; margin-right:10px;}
+.reading-item>h3>.rev-tag{ color:var(--accent); font-size:13px; margin-left:8px;}
+.kw{ display:flex; flex-wrap:wrap; gap:6px; margin:8px 0;}
+.kw span{ font-size:12.5px; background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft); padding:2px 10px; border-radius:999px;}
+.reading-item p{ margin:6px 0; color:var(--ink-soft); font-size:15px;}
+.reading-item p b{ color:var(--ink);}
+.summary-box{
+margin-top:18px; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:18px 20px;
+}
+.summary-box h3{ margin:0 0 8px; font-size:17px; color:var(--gold); letter-spacing:.05em;}
+.summary-box p{ margin:6px 0; color:var(--ink-soft); font-size:15px;}
+.summary-box p b{ color:var(--ink);}
+.result-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;}
+.btn.small{ font-size:14px; padding:8px 22px; min-height:42px;}
+.copy-ok{ color:var(--gold); font-size:13.5px; align-self:center;}
+#historySection{ display:none;}
+.history-item{
+display:flex; justify-content:space-between; gap:12px; align-items:baseline; padding:11px 2px; border-top:1px dashed var(--line); flex-wrap:wrap;
+}
+.history-item:first-of-type{ border-top:none;}
+.history-item>.hq{ font-weight:600; font-size:15px;}
+.history-item>.hc{ color:var(--ink-soft); font-size:13.5px;}
+.history-item time{ color:var(--ink-faint); font-size:12.5px; font-family:"Cormorant Garamond",serif; letter-spacing:.08em;}
+.guide-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px 26px; font-size:14.5px; color:var(--ink-soft);}
+.guide-grid b{ color:var(--ink);}
+footer{ text-align:center; color:var(--ink-faint); font-size:12.5px; margin-top:34px; line-height:1.8;}
+@media (max-width:640px){
+.spreads{ grid-template-columns:1fr;}
+.guide-grid{ grid-template-columns:1fr;}
+section.panel{ padding:18px 16px;}
+.slot{ width:calc(50% - 10px);}
+.tcard{ width:100%; max-width:168px; height:auto; aspect-ratio:168/264;}
+.drawn.five>.slot{ width:calc(50% - 10px);}
+.drawn.five>.slot:last-child{ width:60%;}
+.lang-switch{ top:10px; right:10px;}
+}
+@media (prefers-reduced-motion: reduce){
+.tcard-inner{ transition:none;}
+.deck-stack.shuffling>.deck-card{ animation:none;}
+html{ scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="lang-switch" role="group" aria-label="Language / 语言切换">
+<button type="button" id="langZh" aria-pressed="true">中文</button>
+<button type="button" id="langEn" aria-pressed="false">EN</button>
+</div>
+<div class="wrap">
+<header>
+<div class="moon" aria-hidden="true">☾ ✦ ☽</div>
+<h1><span id="titleMain">塔罗占卜</span><span class="en" id="titleSub">Tarot Reading</span></h1>
+<p class="tagline" id="tagline">静下心来，想着你最想问的那件事，然后抽牌。<br />完整的 78 张韦特塔罗，含正位与逆位解读。</p>
+<div class="rule" aria-hidden="true"><span>✦</span></div>
+</header>
+
+<section class="panel" aria-labelledby="qTitle">
+<h2 id="qTitle">① 写下你的问题</h2>
+<p class="hint" id="qHint">问题越具体，牌面越好读。也可以留空，只抽一张今日指引。</p>
+<label class="flabel" for="question" id="qLabel">我想问……</label>
+<textarea id="question" rows="2" placeholder="例如：接下来三个月，我的事业会有什么变化？"></textarea>
+<div class="topics" id="topicsBox" aria-label="常见问题方向">
+<button type="button" class="chip" data-q="最近我的感情会有什么发展？" data-q-en="How will my love life develop in the near future?">感情</button>
+<button type="button" class="chip" data-q="接下来一段时间，我的事业和工作会如何？" data-q-en="How will my career and work go in the coming period?">事业</button>
+<button type="button" class="chip" data-q="最近我的财运怎么样？有什么需要注意的？" data-q-en="How are my finances lately? What should I watch out for?">财运</button>
+<button type="button" class="chip" data-q="我现在面临的这个选择，应该怎么走？" data-q-en="How should I approach the choice I am facing right now?">抉择</button>
+<button type="button" class="chip" data-q="今天的我，需要留意什么？给我一个指引。" data-q-en="What should I pay attention to today? Give me some guidance.">今日指引</button>
+</div>
+</section>
+
+<section class="panel" aria-labelledby="sTitle">
+<h2 id="sTitle">② 选择牌阵</h2>
+<p class="hint" id="sHint">第一次玩推荐三张牌阵，信息量刚好。</p>
+<div class="spreads" role="group" aria-label="牌阵选择" id="spreadsBox">
+<button type="button" class="spread" data-spread="one" aria-pressed="false">
+<b>单张指引 · 1 张</b>
+<small>快速抽一张，看当下的核心提示。</small>
+</button>
+<button type="button" class="spread" data-spread="time" aria-pressed="true">
+<b>时间之流 · 3 张</b>
+<small>过去 → 现在 → 未来，看一件事的来龙去脉。</small>
+</button>
+<button type="button" class="spread" data-spread="advice" aria-pressed="false">
+<b>现状与建议 · 3 张</b>
+<small>现状、阻碍、建议，适合有具体困扰时用。</small>
+</button>
+<button type="button" class="spread" data-spread="five" aria-pressed="false">
+<b>五张十字 · 5 张</b>
+<small>现状、挑战、根源、未来走向与建议，看得更完整。</small>
+</button>
+<button type="button" class="spread" data-spread="moon" aria-pressed="false">
+<b>月相牌阵 · 5 张</b>
+<small>当下的我、放下的、迎接的、隐藏的、光的方向。</small>
+</button>
+<button type="button" class="spread" data-spread="choice" aria-pressed="false">
+<b>二选一 · 5 张</b>
+<small>两个选项各自的走向，再加一张给你的建议。</small>
+</button>
+</div>
+<div class="opts">
+<button type="button" class="toggle" id="revToggle" aria-pressed="true">逆位：开</button>
+<span class="hint" style="margin:0" id="revHint">关掉逆位时，所有牌都会以正位出现，解读更温和。</span>
+</div>
+</section>
+
+<section class="panel stage" aria-labelledby="dTitle">
+<h2 id="dTitle" style="text-align:center">③ 洗牌抽牌</h2>
+<p class="ritual" id="ritualText">在心里默念你的问题，然后点「洗牌」。洗好之后点「抽牌」，牌会一张一张翻开，点任意一张牌可以单独再翻看它。</p>
+<div class="deck-stack" id="deckStack" aria-hidden="true">
+<div class="deck-card"></div>
+<div class="deck-card"></div>
+<div class="deck-card"></div>
+</div>
+<div class="deck-count">LXXVIII · 78 CARDS</div>
+<div class="stage-actions">
+<button type="button" class="btn ghost" id="shuffleBtn">洗 牌</button>
+<button type="button" class="btn primary" id="drawBtn">抽 牌</button>
+</div>
+<p class="stage-status" id="stageStatus" role="status"></p>
+</section>
+
+<section class="panel" id="resultSection" aria-labelledby="rTitle">
+<h2 id="rTitle">牌面解读</h2>
+<p class="hint" id="resultQuestion"></p>
+<div class="drawn" id="drawnRow"></div>
+<div class="reading-list" id="readingList"></div>
+<div class="summary-box" id="summaryBox"></div>
+<div class="result-actions">
+<button type="button" class="btn ghost small" id="againBtn">换个问题再抽</button>
+<button type="button" class="btn ghost small" id="copyBtn">复制这次解读</button>
+<span class="copy-ok" id="copyOk"></span>
+</div>
+</section>
+
+<section class="panel" id="historySection" aria-labelledby="hTitle">
+<h2 id="hTitle">本次占卜记录</h2>
+<p class="hint" id="hHint">只保留在这次打开页面期间，刷新就会清空。</p>
+<div id="historyList"></div>
+</section>
+
+<section class="panel" aria-labelledby="gTitle">
+<h2 id="gTitle">小词典</h2>
+<p class="hint" id="gHint">看不懂牌的时候，先记住这几组对应关系。</p>
+<div class="guide-grid" id="guideGrid">
+<div class="guide-item"><b>大阿卡纳（22 张）</b>：人生的大主题和转折点，出现越多，说明这件事对你越重要。</div>
+<div class="guide-item"><b>权杖</b>：火元素，行动、热情、事业和创造力。</div>
+<div class="guide-item"><b>圣杯</b>：水元素，情感、关系、直觉和内心感受。</div>
+<div class="guide-item"><b>宝剑</b>：风元素，思考、沟通、真相，也包括冲突和压力。</div>
+<div class="guide-item"><b>星币</b>：土元素，金钱、工作、身体和现实层面的安排。</div>
+<div class="guide-item"><b>逆位</b>：不是简单的“坏”，更多是能量受阻、延迟、内化，或提醒你换个角度看。</div>
+</div>
+</section>
+
+<div class="cross-nav bottom">
+<a class="cross-btn" href="https://jinghanz-808.github.io/chinese-divination/" target="_blank" rel="noopener noreferrer"><span class="cross-icon" aria-hidden="true">☯</span><span class="divination-label">去看看中式占卜</span><span class="cross-arrow" aria-hidden="true">→</span></a>
+</div>
+
+<footer id="footerText">
+塔罗是一种自我对话的工具，牌面给的是角度，不是判决。<br />
+重要的决定，还是要听你自己的。
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var lang = "zh";
+function isEn(){ return lang === "en"; }
+function L(zh, en){ return isEn() ? en : zh; }
+
+/* ============ 大阿卡纳 22 张（中文） ============ */
+var MAJOR = [
+{n:"愚者", e:"The Fool", num:"0", g:"✧", kw:["新的开始","自由","冒险"], up:"一段全新的旅程正在打开。别想太多，先迈出第一步，经验会在路上长出来。保持好奇和轻盈，允许自己像个新手一样去试。", rev:"可能有些冲动或准备不足。先看看脚下的路再跳，尤其别在没搞清状况时做不可挽回的决定。"},
+{n:"魔术师", e:"The Magician", num:"I", g:"∞", kw:["行动力","资源齐备","创造"], up:"你手里其实已经有需要的资源和能力，现在缺的只是动手。把想法落成具体的第一步，你会发现事情比想象中顺。", rev:"能量分散，或有本事却没用在正道上。小心空谈和操纵，也提醒自己：别低估自己，更别把才华浪费在纠结上。"},
+{n:"女祭司", e:"The High Priestess", num:"II", g:"☽", kw:["直觉","潜意识","静观"], up:"答案不在外面，在你的直觉里。先别急着行动，留一点安静给自己，有些信息还没浮出水面，等一等会看得更清。", rev:"你在忽略内心的声音，或者有些事被刻意藏着。多留意梦境、情绪和那些“说不清但就是觉得不对”的感觉。"},
+{n:"皇后", e:"The Empress", num:"III", g:"♀", kw:["丰盛","滋养","创造力"], up:"丰盛和滋养的能量。无论是创作、关系还是项目，都适合慢慢养、耐心等它长大。对自己好一点，丰盛先从照顾自己开始。", rev:"可能过度付出、照顾别人却耗空了自己，或者创意卡住了。先把自己的杯子倒满，再谈给予。"},
+{n:"皇帝", e:"The Emperor", num:"IV", g:"♚", kw:["秩序","权威","结构"], up:"是时候建立秩序了：定规则、做计划、把地基打牢。理性、纪律和边界感会帮你把局面稳住。", rev:"可能太固执、控制欲太强，或者相反，局面缺乏结构。问问自己：是规则在服务你，还是你在被规则绑架？"},
+{n:"教皇", e:"The Hierophant", num:"V", g:"♰", kw:["传统","信念","指引"], up:"遵循已被验证的方法，或向有经验的人请教，会少走弯路。这也可能关乎承诺、仪式感和你真心认同的价值观。", rev:"现成的规矩未必适合你。你可以质疑传统、走自己的路，但要想清楚自己真正信的是什么，而不是为了反对而反对。"},
+{n:"恋人", e:"The Lovers", num:"VI", g:"♥", kw:["爱","选择","价值观"], up:"一段重要的关系，或一个关乎价值观的选择。跟着真心走，而不是跟着恐惧走；当选择和内心一致，路就会顺。", rev:"关系或选择里出现了不一致：想要的和在做的对不上。先诚实面对自己，才能对别人诚实。"},
+{n:"战车", e:"The Chariot", num:"VII", g:"♘", kw:["意志","前进","掌控"], up:"方向明确、势头正好。用意志力把不同的力量拧成一股绳，主动出击，你能把局面推向想要的结果。", rev:"方向有点乱，或者用力过猛反而失控。先停下来对齐目标，别让两匹马各跑各的。"},
+{n:"力量", e:"Strength", num:"VIII", g:"♌", kw:["耐心","温柔的坚定","勇气"], up:"真正的力量是温柔的坚定。用耐心和包容去面对眼前的难题（包括你自己的情绪），比硬碰硬有效得多。", rev:"最近可能有点没底气，或者耐心快耗尽了。先别责怪自己，恢复体力和信心，比逼自己更重要。"},
+{n:"隐士", e:"The Hermit", num:"IX", g:"✶", kw:["独处","内省","寻找答案"], up:"适合暂时退一步，独处、复盘、想清楚。答案需要安静才能听见，这段时间减少噪音，多和自己待着。", rev:"独处太久变成了封闭，或者明明需要想清楚却一直在逃避。留意：你是在休息，还是在躲？"},
+{n:"命运之轮", e:"Wheel of Fortune", num:"X", g:"☸", kw:["转机","周期","运气"], up:"局势正在转动，转机可能比你想的来得快。顺势而为，抓住正在打开的机会，周期对你是友好的。", rev:"最近可能觉得运气不在自己这边，或抗拒正在发生的变化。轮子总会转，先稳住，把能控制的部分做好。"},
+{n:"正义", e:"Justice", num:"XI", g:"♎", kw:["公平","真相","因果"], up:"用事实和逻辑做决定，公平会被看见。如果涉及合同、规则或评判，结果大体公正；你种下的因，正在结果。", rev:"可能有信息不对称，或某个决定并不公平。把证据和条款看仔细，也诚实检查自己有没有偏心。"},
+{n:"倒吊人", e:"The Hanged Man", num:"XII", g:"♆", kw:["暂停","换个角度","放下"], up:"卡住不一定是坏事。主动按下暂停键，换个角度看问题，有些执着放下了，路反而通了。", rev:"无谓的牺牲或漫长的拖延正在消耗你。如果等待没有意义，是时候停止自我感动，做出改变。"},
+{n:"死神", e:"Death", num:"XIII", g:"♏", kw:["结束","蜕变","新陈代谢"], up:"一个阶段正在真正结束，为新的东西腾地方。这不是字面意义的死亡，而是告别旧模式、旧身份或旧关系，痛但必要。", rev:"你在抗拒一个已经结束的事情。拖得越久越累，松开手，新阶段才进得来。"},
+{n:"节制", e:"Temperance", num:"XIV", g:"⚗", kw:["平衡","调和","耐心"], up:"把不同的元素慢慢调和：工作与休息、理性与感受、进与退。不极端、不催促，中道反而走得最远。", rev:"最近有些失衡：某件事过量了，或某段关系里一直在将就。把节奏调回来，从最失衡的那一处开始。"},
+{n:"恶魔", e:"The Devil", num:"XV", g:"♑", kw:["执念","束缚","欲望"], up:"留意让你上瘾或离不开的东西：一段关系、一种习惯、一个执念。先承认它在控制你，才谈得上松开。", rev:"你正在从某种束缚里挣脱出来，或者已经意识到问题所在。继续往外走，别回头捡那条链子。"},
+{n:"高塔", e:"The Tower", num:"XVI", g:"♜", kw:["突变","打破","真相"], up:"某个建立在脆弱基础上的东西可能突然被打破。与其说是惩罚，不如说是假象撑不住了，真相虽然刺眼，但地基能重新打。", rev:"你隐约知道哪里不对，却在拖延那场必然的改变。小修小补解决不了根基问题，越早面对，代价越小。"},
+{n:"星星", e:"The Star", num:"XVII", g:"★", kw:["希望","疗愈","方向"], up:"经历过难熬的阶段之后，希望正在回来。相信长期的方向，做真实的自己，灵感和疗愈都在路上。", rev:"信心有点不足，觉得努力看不到回报。别急着否定自己，先照顾好身心，希望需要体力来支撑。"},
+{n:"月亮", e:"The Moon", num:"XVIII", g:"☾", kw:["迷雾","潜意识","不安"], up:"事情还看不清，别在迷雾里下重注。不安和梦境都在传递信息，先观察、收集感受，等天亮一点再决定。", rev:"迷雾在散，你开始看清之前看不清的东西。或者焦虑被放大了，分清哪些是事实，哪些是想象。"},
+{n:"太阳", e:"The Sun", num:"XIX", g:"☀", kw:["喜悦","成功","坦诚"], up:"少有的明朗牌：活力、喜悦和坦诚。把事情放到阳光下，简单直接地去做、去享受，结果大概率是好的。", rev:"开心被打了折，或者有点过度乐观。先别急着庆祝，把细节核对一遍；快乐还在，只是需要落地。"},
+{n:"审判", e:"Judgement", num:"XX", g:"✠", kw:["觉醒","召唤","复盘"], up:"一个内在的召唤，或者到了总结过去、做出重要决定的时刻。听从那个“是时候了”的声音，原谅过去，然后往前。", rev:"你在回避一个该做的决定，或对过去的事一直自责。复盘是为了放下，不是为了反复惩罚自己。"},
+{n:"世界", e:"The World", num:"XXI", g:"⊕", kw:["完成","圆满","整合"], up:"一个周期圆满完成，你把该学的都学到了。享受这份完整感，然后带着它开启下一程，眼界可以放得更大。", rev:"只差最后一步，却总觉得没完成。回头看看缺的是哪一块，收尾做好，这个周期才能真正关上。"}
+];
+var MAJOR_EN = [
+{kw:["New Beginnings","Freedom","Adventure"], up:"A brand new journey is opening up. Don't overthink it — take the first step, and experience will grow along the way. Stay curious and light, and allow yourself to try as a beginner.", rev:"You may be acting impulsively or without enough preparation. Look at the path beneath your feet before you leap, especially before making an irreversible decision without understanding the situation."},
+{kw:["Initiative","Resourcefulness","Creation"], up:"You already have the resources and abilities you need — what's missing is simply action. Turn your idea into a concrete first step, and things will flow more smoothly than you expect.", rev:"Your energy is scattered, or your talents are not being used in the right direction. Watch out for empty talk and manipulation, and remind yourself not to underestimate yourself or waste your gifts on rumination."},
+{kw:["Intuition","Subconscious","Stillness"], up:"The answer is not outside — it is in your intuition. Don't rush to act. Leave yourself some quiet; some information has not surfaced yet, and waiting will bring clarity.", rev:"You may be ignoring your inner voice, or something is being deliberately hidden. Pay attention to dreams, emotions, and that 'can't explain it but it feels off' sensation."},
+{kw:["Abundance","Nurturing","Creativity"], up:"An energy of abundance and nurturing. Whether it is a creative project, a relationship, or a venture, let it grow slowly and patiently. Be kind to yourself — abundance starts with caring for yourself first.", rev:"You may be over-giving, caring for others while draining yourself, or feeling creatively blocked. Fill your own cup first before giving to others."},
+{kw:["Order","Authority","Structure"], up:"It is time to establish order: set rules, make a plan, and lay a solid foundation. Rationality, discipline, and clear boundaries will help you stabilize the situation.", rev:"You may be too stubborn or controlling, or the situation may lack structure. Ask yourself: are the rules serving you, or are you being trapped by them?"},
+{kw:["Tradition","Belief","Guidance"], up:"Following a proven method or seeking advice from someone experienced will save you detours. This may also concern commitment, ritual, and the values you truly believe in.", rev:"Ready-made rules may not suit you. You can question tradition and walk your own path, but be clear about what you truly believe — don't oppose just for the sake of opposing."},
+{kw:["Love","Choice","Values"], up:"An important relationship, or a choice that concerns your values. Follow your true heart, not your fear; when your choice aligns with your inner self, the path will smooth out.", rev:"There is a misalignment in a relationship or choice: what you want and what you are doing don't match. Be honest with yourself first before you can be honest with others."},
+{kw:["Willpower","Momentum","Control"], up:"Your direction is clear and momentum is on your side. Use willpower to pull different forces together and take the initiative — you can steer the outcome toward what you want.", rev:"Your direction is a bit scattered, or you are pushing too hard and losing control. Pause to realign your goals — don't let the two horses run in different directions."},
+{kw:["Patience","Gentle Resolve","Courage"], up:"True strength is gentle resolve. Facing the challenge ahead — including your own emotions — with patience and compassion is far more effective than meeting force with force.", rev:"You may be feeling low on confidence lately, or your patience is running thin. Don't blame yourself; restoring your energy and confidence matters more than forcing yourself."},
+{kw:["Solitude","Reflection","Seeking Answers"], up:"It is a good time to step back, be alone, review, and think clearly. Answers need quiet to be heard. Reduce the noise for a while and spend time with yourself.", rev:"Solitude has lasted too long and turned into isolation, or you are avoiding the reflection you need. Notice: are you resting, or are you hiding?"},
+{kw:["Turning Point","Cycles","Luck"], up:"The situation is turning, and a shift may come sooner than you think. Go with the flow and seize the opening that is appearing — the cycle is in your favor.", rev:"Luck may not feel on your side lately, or you are resisting a change that is already happening. The wheel always turns; hold steady and do well with what you can control."},
+{kw:["Fairness","Truth","Cause and Effect"], up:"Make decisions based on facts and logic, and fairness will be seen. If contracts, rules, or judgments are involved, the outcome will be broadly fair; the causes you have planted are now bearing fruit.", rev:"There may be information asymmetry or an unfair decision. Examine evidence and terms carefully, and honestly check whether you have any bias of your own."},
+{kw:["Pause","New Perspective","Letting Go"], up:"Being stuck is not necessarily bad. Press pause on purpose and look at the problem from a different angle; letting go of some attachments may open the way.", rev:"Pointless sacrifice or prolonged delay is draining you. If the waiting has no meaning, it is time to stop romanticizing it and make a change."},
+{kw:["Endings","Transformation","Renewal"], up:"A phase is truly ending to make room for something new. This is not literal death, but saying goodbye to an old pattern, identity, or relationship — painful, but necessary.", rev:"You are resisting something that has already ended. The longer you drag it out, the more exhausting it becomes. Let go, and the new phase can enter."},
+{kw:["Balance","Harmony","Patience"], up:"Slowly blend different elements together: work and rest, reason and feeling, advancing and retreating. Avoid extremes and rushing — the middle path goes the farthest.", rev:"Things are a bit out of balance lately: something is in excess, or you are constantly compromising in a relationship. Restore your rhythm, starting with the most imbalanced area."},
+{kw:["Obsession","Bondage","Desire"], up:"Watch for what you are addicted to or can't let go of: a relationship, a habit, an obsession. Admitting it is controlling you is the first step to loosening its hold.", rev:"You are breaking free from some form of bondage, or you have already recognized the problem. Keep walking outward — don't turn back to pick up that chain."},
+{kw:["Upheaval","Breakdown","Truth"], up:"Something built on a fragile foundation may suddenly break apart. Rather than a punishment, it is an illusion that can no longer hold — the truth may sting, but the foundation can be rebuilt.", rev:"You sense something is wrong but are delaying the inevitable change. Patchwork fixes won't solve a foundational problem; the sooner you face it, the smaller the cost."},
+{kw:["Hope","Healing","Direction"], up:"After a difficult phase, hope is returning. Trust the long-term direction, be your authentic self, and know that inspiration and healing are on their way.", rev:"Confidence is a bit low, and your efforts feel unrewarded. Don't rush to dismiss yourself — care for your body and mind first; hope needs energy to sustain it."},
+{kw:["Fog","Subconscious","Unease"], up:"Things are not clear yet — don't make big bets in the fog. Unease and dreams are both carrying information. Observe and gather your feelings first, and decide when it is a bit brighter.", rev:"The fog is lifting and you are beginning to see what was unclear before. Or anxiety is being amplified — distinguish what is fact and what is imagination."},
+{kw:["Joy","Success","Openness"], up:"A rare card of clarity: vitality, joy, and openness. Bring things into the sunlight, act simply and directly, enjoy the process — the outcome will most likely be good.", rev:"Happiness is somewhat discounted, or you are being overly optimistic. Don't rush to celebrate; double-check the details first. The joy is still there, it just needs grounding."},
+{kw:["Awakening","Calling","Review"], up:"An inner calling, or a moment to sum up the past and make an important decision. Listen to that 'it is time' voice, forgive the past, and move forward.", rev:"You are avoiding a decision you need to make, or blaming yourself endlessly for the past. Reviewing is for letting go, not for punishing yourself repeatedly."},
+{kw:["Completion","Fulfillment","Integration"], up:"A cycle is complete and you have learned what there was to learn. Enjoy this sense of wholeness, then begin the next journey with it — and let your horizons grow wider.", rev:"You are just one step from the finish but it never feels complete. Look back to see which piece is missing; finish the closing properly so this cycle can truly close."}
+];
+
+/* ============ 小阿卡纳 ============ */
+var SUITS = {
+wands: { cn:"权杖", en:"Wands", el:"火", theme:"行动、热情与事业", themeEn:"action, passion, and career", kw:"行动力", kwEn:"Drive"},
+cups: { cn:"圣杯", en:"Cups", el:"水", theme:"情感、关系与内心", themeEn:"emotions, relationships, and inner life", kw:"感受", kwEn:"Feelings"},
+swords: { cn:"宝剑", en:"Swords", el:"风", theme:"思考、沟通与真相", themeEn:"thinking, communication, and truth", kw:"理性", kwEn:"Reason"},
+pentacles:{ cn:"星币", en:"Pentacles",el:"土", theme:"金钱、工作与现实安排", themeEn:"money, work, and practical arrangements", kw:"务实", kwEn:"Pragmatism"}
+};
+var SUIT_SVG = {
+wands:'<svg viewBox="0 0 64 84" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M20 78 L42 16"/><path d="M42 16 l2.5-7 M42 16 l7-2.5 M42 16 l-2-7.5 M42 16 l-7.5-2" stroke-width="2.6"/><circle cx="42" cy="16" r="3.4" fill="currentColor" stroke="none"/><path d="M24 62 q6 2 10-2 M28 50 q6 2 10-2" stroke-width="2.4"/></svg>',
+cups:'<svg viewBox="0 0 64 84" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M14 14 h36 v10 a18 18 0 0 1 -36 0 z"/><path d="M32 42 v16 M20 72 h24 M32 58 v14"/><path d="M14 20 C4 20 4 34 14 34 M50 20 c10 0 10 14 0 14" stroke-width="2.6"/></svg>',
+swords:'<svg viewBox="0 0 64 84" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M32 6 L38 16 V52 H26 V16 Z"/><path d="M16 58 h32 M32 58 v10 M26 76 h12"/></svg>',
+pentacles:'<svg viewBox="0 0 64 84" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><circle cx="32" cy="42" r="26"/><path d="M32 24 l5.3 12.2 13.2 1.2 -10 8.8 3 12.9 -11.5-6.9 -11.5 6.9 3-12.9 -10-8.8 13.2-1.2 Z"/></svg>'
+};
+var RANKS = [
+{ id:"Ace", cn:"一", num:"A", kw:["新的种子","潜能"], up:"一个新的机会或灵感刚刚萌芽，趁热开始，别等万事俱备。", rev:"机会被延迟或动力不足，先确认这是不是你真正想要的，再投入。"},
+{ id:"Two", cn:"二", num:"2", kw:["选择","平衡"], up:"你站在一个岔路口，或者在两件事之间找平衡。把选项摊开看，答案会清楚很多。", rev:"犹豫太久或两边都不肯放手，反而更乱。先排优先级，选一边站稳。"},
+{ id:"Three", cn:"三", num:"3", kw:["合作","初步成果"], up:"早期的努力开始见到回报，适合和人协作、把视野放远一点。", rev:"配合上有点不顺，或计划需要返工。把沟通做在前面，别各自猜。"},
+{ id:"Four", cn:"四", num:"4", kw:["稳定","休整"], up:"局面暂时稳定，适合休整和巩固。享受这份安稳，但别舒服到忘记目标。", rev:"稳定变成了停滞，或者根基没有看起来那么牢。检查一下哪里需要修补。"},
+{ id:"Five", cn:"五", num:"5", kw:["冲突","变化"], up:"摩擦和竞争在所难免，这是一段不太舒服但能筛掉弱点的时期。别硬刚，留得青山在。", rev:"冲突在缓和，或者你正想避开一场没必要的争执。学会放下输赢，事情反而好办。"},
+{ id:"Six", cn:"六", num:"6", kw:["进展","支持"], up:"事情在往好的方向走，你也可能得到他人的支持或认可。顺势推进，也别忘了回馈。", rev:"进展比预期慢，或在人情往来上有点失衡。看看是不是只有你在单方面付出。"},
+{ id:"Seven", cn:"七", num:"7", kw:["坚持","策略"], up:"需要守住立场、拿出策略的一段路。别被一时的质疑带偏，评估完再行动。", rev:"有点坚持不下去了，或者方向本身就值得怀疑。先分清：是方法不对，还是目标不对。"},
+{ id:"Eight", cn:"八", num:"8", kw:["加速","专注"], up:"节奏明显加快，适合集中火力把一件事做精、做透。消息和进展会密集到来，跟上节奏。", rev:"忙却不见成效，或信息混乱。砍掉不重要的事，专注本身就是加速。"},
+{ id:"Nine", cn:"九", num:"9", kw:["接近完成","储备"], up:"你已经走了很远，离目标不远了。守住成果，也给自己留一点余量和退路。", rev:"有点疲惫或过度防备。别把所有人都挡在外面，适当的信任能帮你走完最后一程。"},
+{ id:"Ten", cn:"十", num:"10", kw:["完成","积累"], up:"一个阶段圆满收官，积累看得见。享受成果，也开始想想下一个周期要种什么。", rev:"负担有点过重，或者完成之后反而空虚。学会放下多余的责任，轻装进入下一程。"},
+{ id:"Page", cn:"侍从", num:"Page", kw:["消息","好奇心"], up:"会有新的消息或学习机会，保持好奇，像新手一样去探索，别怕问问题。", rev:"消息可能不靠谱，或三分钟热度。先核实再行动，把好奇心坚持得久一点。"},
+{ id:"Knight", cn:"骑士", num:"Knight", kw:["行动","追求"], up:"适合主动出击、快速推进。带着冲劲去追你想要的，但别快到把自己绊倒。", rev:"节奏太急或方向飘忽，容易半途而废。慢一点，把路线先想清楚再冲。"},
+{ id:"Queen", cn:"王后", num:"Queen", kw:["成熟","滋养"], up:"用成熟、体贴又务实的方式处理问题。你的经验和直觉都在线，信任自己的判断。", rev:"可能过度操心或情绪被牵着走。先把边界立好，照顾别人之前先照顾自己。"},
+{ id:"King", cn:"国王", num:"King", kw:["掌控","担当"], up:"是时候拿出担当和决断力了。用经验和规则把局面管起来，结果会向专业靠拢。", rev:"小心过于强势或固执，也可能有人在用权威压你。权力要用在解决问题上，不是压人上。"}
+];
+var RANKS_EN = [
+{kw:["New Seed","Potential"], up:"A new opportunity or inspiration has just sprouted. Start while the energy is fresh — don't wait until everything is perfect.", rev:"An opportunity is delayed or motivation is low. First confirm this is truly what you want before investing."},
+{kw:["Choice","Balance"], up:"You are at a crossroads, or balancing two things. Lay your options out clearly and the answer will become much clearer.", rev:"You have hesitated too long or won't let go of either side, which only adds confusion. Prioritize first, then stand firmly on one side."},
+{kw:["Collaboration","Early Results"], up:"Early efforts are beginning to pay off. It is a good time to collaborate and widen your perspective.", rev:"Collaboration is a bit bumpy, or a plan needs rework. Communicate upfront instead of guessing at each other."},
+{kw:["Stability","Rest"], up:"The situation is stable for now — a good time to rest and consolidate. Enjoy the steadiness, but don't get so comfortable you forget your goal.", rev:"Stability has turned into stagnation, or the foundation is not as solid as it looks. Check where repairs are needed."},
+{kw:["Conflict","Change"], up:"Friction and competition are unavoidable — an uncomfortable period that filters out weaknesses. Don't fight head-on; preserve your strength.", rev:"Conflict is easing, or you are choosing to avoid an unnecessary argument. Letting go of winning and losing makes things easier."},
+{kw:["Progress","Support"], up:"Things are moving in a good direction, and you may receive support or recognition from others. Keep the momentum, and remember to give back.", rev:"Progress is slower than expected, or giving and receiving feel unbalanced. Check whether you are the only one giving."},
+{kw:["Perseverance","Strategy"], up:"A stretch where you need to hold your ground and think strategically. Don't let momentary doubt sway you; assess before you act.", rev:"You are struggling to hold on, or the direction itself deserves questioning. Distinguish: is it the method that is wrong, or the goal?"},
+{kw:["Acceleration","Focus"], up:"The pace is picking up noticeably — a good time to focus your firepower and do one thing well and thoroughly. News and progress will arrive in quick succession; keep up.", rev:"Busy but ineffective, or information is chaotic. Cut what is unimportant; focus itself is acceleration."},
+{kw:["Near Completion","Reserves"], up:"You have come a long way and are not far from your goal. Protect what you have achieved, and keep some reserves and a way out for yourself.", rev:"You are a bit weary or overly guarded. Don't shut everyone out; appropriate trust will help you finish the last stretch."},
+{kw:["Completion","Accumulation"], up:"A phase wraps up successfully and your accumulation is visible. Enjoy the results, and start thinking about what to plant in the next cycle.", rev:"The burden feels a bit heavy, or completion has left you feeling empty. Learn to set down excess responsibilities and travel light into the next phase."},
+{kw:["News","Curiosity"], up:"New news or a learning opportunity is coming. Stay curious, explore like a beginner, and don't be afraid to ask questions.", rev:"News may be unreliable, or enthusiasm fades quickly. Verify before acting, and sustain your curiosity a little longer."},
+{kw:["Action","Pursuit"], up:"A good time to take initiative and move fast. Chase what you want with drive, but don't go so fast you trip yourself.", rev:"The pace is too rushed or direction is drifting, making it easy to quit halfway. Slow down and map your route before charging ahead."},
+{kw:["Maturity","Nurturing"], up:"Handle things in a mature, considerate, and practical way. Your experience and intuition are both online — trust your judgment.", rev:"You may be worrying too much or letting emotions lead you. Set your boundaries first, and care for yourself before caring for others."},
+{kw:["Mastery","Responsibility"], up:"It is time to step up with responsibility and decisiveness. Use experience and structure to manage the situation, and the outcome will lean professional.", rev:"Watch out for being overly forceful or rigid, or for someone using authority to pressure you. Power should be used to solve problems, not to dominate others."}
+];
+function buildDeck(){
+var deck = [];
+MAJOR.forEach(function(c, i){
+deck.push({ name:c.n, en:c.e, num:c.num, glyph:c.g, svg:null, kw:c.kw, kwEn:MAJOR_EN[i].kw, up:c.up, upEn:MAJOR_EN[i].up, rev:c.rev, revEn:MAJOR_EN[i].rev, major:true, suit:null, idx:i});
+});
+Object.keys(SUITS).forEach(function(key){
+var s = SUITS[key];
+RANKS.forEach(function(r, ri){
+deck.push({
+name: s.cn + r.cn, en: r.id + " of " + s.en, num: r.num, glyph:null, svg: SUIT_SVG[key],
+kw: [r.kw[0], r.kw[1], s.kw], kwEn: [RANKS_EN[ri].kw[0], RANKS_EN[ri].kw[1], s.kwEn],
+up: "在" + s.theme + "方面：" + r.up, upEn: "Regarding " + s.themeEn + ": " + RANKS_EN[ri].up,
+rev: "在" + s.theme + "方面：" + r.rev, revEn: "Regarding " + s.themeEn + ": " + RANKS_EN[ri].rev,
+major:false, suit:key, idx: deck.length
+});
+});
+});
+return deck;
+}
+var DECK = buildDeck();
+function cardName(c){ return isEn() ? c.en : c.name; }
+function cardSubName(c){ return isEn() ? c.name : c.en; }
+function cardKw(c){ return isEn() ? c.kwEn : c.kw; }
+function cardText(c, reversed){ return reversed ? (isEn() ? c.revEn : c.rev) : (isEn() ? c.upEn : c.up); }
+
+/* ============ 牌阵 ============ */
+var SPREADS = {
+one: { label:"单张指引", positions:["今日指引"]},
+time: { label:"时间之流", positions:["过去","现在","未来"]},
+advice: { label:"现状与建议", positions:["现状","阻碍","建议"]},
+five: { label:"五张十字", positions:["现状","挑战","根源","未来走向","建议"]},
+moon: { label:"月相牌阵", positions:["当下的我","需要放下的","值得迎接的","隐藏的讯息","光的方向"]},
+choice: { label:"二选一", positions:["选项 A","A 的走向","选项 B","B 的走向","给你的建议"]}
+};
+var SPREADS_EN = {
+one: { label:"Single Card Guidance", positions:["Daily Guidance"]},
+time: { label:"Flow of Time", positions:["Past","Present","Future"]},
+advice: { label:"Situation & Advice", positions:["Current Situation","Obstacle","Advice"]},
+five: { label:"Five-Card Cross", positions:["Current Situation","Challenge","Root Cause","Future Trend","Advice"]},
+moon: { label:"Moon Phase Spread", positions:["Present Self","To Release","To Welcome","Hidden Message","Direction of Light"]},
+choice: { label:"Two Choices", positions:["Option A","Path of A","Option B","Path of B","Advice for You"]}
+};
+var SPREAD_UI = {
+zh:{
+one:{b:"单张指引 · 1 张", s:"快速抽一张，看当下的核心提示。"},
+time:{b:"时间之流 · 3 张", s:"过去 → 现在 → 未来，看一件事的来龙去脉。"},
+advice:{b:"现状与建议 · 3 张", s:"现状、阻碍、建议，适合有具体困扰时用。"},
+five:{b:"五张十字 · 5 张", s:"现状、挑战、根源、未来走向与建议，看得更完整。"},
+moon:{b:"月相牌阵 · 5 张", s:"当下的我、放下的、迎接的、隐藏的、光的方向。"},
+choice:{b:"二选一 · 5 张", s:"两个选项各自的走向，再加一张给你的建议。"}
+},
+en:{
+one:{b:"Single Card · 1 Card", s:"Draw one card for a quick, core insight into the present."},
+time:{b:"Flow of Time · 3 Cards", s:"Past → Present → Future: trace how something unfolded."},
+advice:{b:"Situation & Advice · 3 Cards", s:"Situation, obstacle, and advice — ideal for a specific concern."},
+five:{b:"Five-Card Cross · 5 Cards", s:"Situation, challenge, root, future trend, and advice — a fuller picture."},
+moon:{b:"Moon Phase · 5 Cards", s:"Present self, what to release, welcome, what's hidden, and the direction of light."},
+choice:{b:"Two Choices · 5 Cards", s:"The path of each option, plus one card of advice for you."}
+}
+};
+var POS_TIP = {
+"过去":"这张牌说的是已经发生、仍在影响你的部分。把它当作背景，而不是判决。",
+"现在":"这张牌就是你此刻的真实状态，可能和你以为的不太一样。",
+"未来":"这张牌是按当前轨迹走下去的趋势。轨迹可以改，所以它更像天气预报，不是命运。",
+"现状":"这张牌描述事情的核心状态，先看清它，再谈怎么办。",
+"阻碍":"这张牌指出最主要的卡点。它未必是敌人，有时只是还没被看见的那一面。",
+"建议":"这张牌是行动建议，挑里面最小的一步，今天就可以做。",
+"挑战":"这张牌是接下来最需要正面处理的部分，躲开它，代价只会更大。",
+"根源":"这张牌指向问题底层的成因，往往比表面现象更值得处理。",
+"未来走向":"按目前的能量走下去，大致会到的地方。你的选择仍然能改变它。",
+"今日指引":"这张牌是给今天的你的一个核心提示，记住关键词就够了。",
+"当下的我":"这张牌是现在的你：状态、情绪和所处的位置。",
+"需要放下的":"这张牌指出可以松手的东西，放下它不是失去，是腾地方。",
+"值得迎接的":"这张牌是正在靠近你的新能量，张开手，别用旧经验挡住它。",
+"隐藏的讯息":"这张牌是你还没意识到的部分，可能是盲点，也可能是被忽略的资源。",
+"光的方向":"这张牌指出值得朝向的方向，不必一步到位，先朝那边转身。",
+"选项 A":"这张牌代表选项 A 本身的状态和性质。",
+"A 的走向":"选了 A 之后，大致会展开的局面。",
+"选项 B":"这张牌代表选项 B 本身的状态和性质。",
+"B 的走向":"选了 B 之后，大致会展开的局面。",
+"给你的建议":"不论选哪边，这张牌都是给你的提醒。"
+};
+var POS_TIP_EN = {
+"Past":"This card speaks to what has already happened and is still influencing you. Treat it as background, not a verdict.",
+"Present":"This card is your true state right now — it may differ from what you thought.",
+"Future":"This card shows the trend if you continue on the current trajectory. Trajectories can change, so treat it like a weather forecast, not fate.",
+"Current Situation":"This card describes the core state of the matter. See it clearly first, then decide what to do.",
+"Obstacle":"This card points to the main sticking point. It is not necessarily an enemy — sometimes it is just the side you have not seen yet.",
+"Advice":"This card is an action suggestion. Pick the smallest step in it — one you can do today.",
+"Challenge":"This card is what most needs to be faced next. Avoiding it will only raise the cost.",
+"Root Cause":"This card points to the underlying cause of the problem — often more worth addressing than the surface symptoms.",
+"Future Trend":"Where things will roughly land if the current energy continues. Your choices can still change it.",
+"Daily Guidance":"This card is a core reminder for you today. Remembering its keywords is enough.",
+"Present Self":"This card is you right now: your state, emotions, and where you stand.",
+"To Release":"This card points to something you can let go of. Releasing it is not loss — it is making room.",
+"To Welcome":"This card is a new energy approaching you. Open your hands; don't block it with old experience.",
+"Hidden Message":"This card is the part you have not yet realized — it could be a blind spot, or a resource you have overlooked.",
+"Direction of Light":"This card points to a direction worth heading toward. You don't need to arrive in one step — just turn toward it first.",
+"Option A":"This card represents Option A itself — its state and nature.",
+"Path of A":"If you choose A, roughly how the situation will unfold.",
+"Option B":"This card represents Option B itself — its state and nature.",
+"Path of B":"If you choose B, roughly how the situation will unfold.",
+"Advice for You":"Whichever you choose, this card is a reminder for you."
+};
+
+/* ============ 界面文案 ============ */
+var UI = {
+zh:{
+titleMain:"塔罗占卜", titleSub:"Tarot Reading", docTitle:"塔罗占卜 · Tarot Reading",
+tagline:"静下心来，想着你最想问的那件事，然后抽牌。<br />完整的 78 张韦特塔罗，含正位与逆位解读。",
+qTitle:"① 写下你的问题", qHint:"问题越具体，牌面越好读。也可以留空，只抽一张今日指引。", qLabel:"我想问……",
+qPlaceholder:"例如：接下来三个月，我的事业会有什么变化？",
+chips:["感情","事业","财运","抉择","今日指引"], topicsLabel:"常见问题方向", spreadsLabel:"牌阵选择",
+sTitle:"② 选择牌阵", sHint:"第一次玩推荐三张牌阵，信息量刚好。",
+revOn:"逆位：开", revOff:"逆位：关", revHint:"关掉逆位时，所有牌都会以正位出现，解读更温和。",
+dTitle:"③ 洗牌抽牌", ritual:"在心里默念你的问题，然后点「洗牌」。洗好之后点「抽牌」，牌会一张一张翻开，点任意一张牌可以单独再翻看它。",
+shuffle:"洗 牌", draw:"抽 牌",
+rTitle:"牌面解读", again:"换个问题再抽", copy:"复制这次解读",
+hTitle:"本次占卜记录", hHint:"只保留在这次打开页面期间，刷新就会清空。",
+gTitle:"小词典", gHint:"看不懂牌的时候，先记住这几组对应关系。",
+guide:["<b>大阿卡纳（22 张）</b>：人生的大主题和转折点，出现越多，说明这件事对你越重要。","<b>权杖</b>：火元素，行动、热情、事业和创造力。","<b>圣杯</b>：水元素，情感、关系、直觉和内心感受。","<b>宝剑</b>：风元素，思考、沟通、真相，也包括冲突和压力。","<b>星币</b>：土元素，金钱、工作、身体和现实层面的安排。","<b>逆位</b>：不是简单的“坏”，更多是能量受阻、延迟、内化，或提醒你换个角度看。"],
+divination:"去看看中式占卜",
+footer:"塔罗是一种自我对话的工具，牌面给的是角度，不是判决。<br />重要的决定，还是要听你自己的。",
+upright:"正 位", reversed:"逆 位", uprightTag:"正位", reversedTag:"逆位", tapHint:"点牌可翻面",
+posPrefix:"放在这个位置看：", summaryTitle:"综合解读",
+statusInit:"先写下问题、选好牌阵，再洗牌抽牌。",
+statusShuffling:"正在洗牌……在心里把问题再想一遍。", statusShuffled:"洗好了。准备好就点「抽牌」。",
+statusDrawn:"抽好了，向下看解读。点任意一张牌可以翻转查看正反面。",
+noQuestion:"（未填写问题）", noQuestionLong:"（未填写具体问题）",
+yourQuestion:"你的问题：", thisSpread:"本次牌阵：",
+copied:"已复制，去粘贴保存吧。", copyQuestion:"问题：",
+elementNames:{wands:"权杖", cups:"圣杯", swords:"宝剑", pentacles:"星币"}
+},
+en:{
+titleMain:"Tarot Reading", titleSub:"塔罗占卜", docTitle:"Tarot Reading · 塔罗占卜",
+tagline:"Quiet your mind, think of the one thing you most want to ask, then draw.<br />The complete 78-card Rider-Waite tarot, with upright and reversed readings.",
+qTitle:"1. Write Your Question", qHint:"The more specific the question, the easier the cards are to read. You can also leave it blank and draw a daily guidance card.", qLabel:"I want to ask...",
+qPlaceholder:"For example: How will my career change in the next three months?",
+chips:["Love","Career","Money","Decisions","Daily Guidance"], topicsLabel:"Common topics", spreadsLabel:"Choose a spread",
+sTitle:"2. Choose a Spread", sHint:"New here? Start with a three-card spread — just the right amount of information.",
+revOn:"Reversed: On", revOff:"Reversed: Off", revHint:"With reversals off, every card appears upright and the reading is gentler.",
+dTitle:"3. Shuffle & Draw", ritual:"Repeat your question silently in your mind, then tap Shuffle. Once shuffled, tap Draw — the cards will flip over one by one. Tap any card to flip it again.",
+shuffle:"Shuffle", draw:"Draw",
+rTitle:"Your Reading", again:"Ask Another Question", copy:"Copy This Reading",
+hTitle:"Readings This Session", hHint:"Kept only while this page is open — refreshing clears it.",
+gTitle:"Mini Glossary", gHint:"When a card confuses you, start with these correspondences.",
+guide:["<b>Major Arcana (22 cards)</b>: Life's big themes and turning points. The more that appear, the more this matter weighs on you.","<b>Wands</b>: Fire — action, passion, career, and creativity.","<b>Cups</b>: Water — emotions, relationships, intuition, and inner feelings.","<b>Swords</b>: Air — thinking, communication, truth, as well as conflict and pressure.","<b>Pentacles</b>: Earth — money, work, the body, and practical arrangements.","<b>Reversed</b>: Not simply 'bad' — more often blocked, delayed, or internalized energy, or a nudge to look from another angle."],
+divination:"Try Chinese Divination",
+footer:"Tarot is a tool for talking with yourself. The cards offer a perspective, not a verdict.<br />For important decisions, listen to yourself.",
+upright:"Upright", reversed:"Reversed", uprightTag:"Upright", reversedTag:"Reversed", tapHint:"Tap card to flip",
+posPrefix:"In this position: ", summaryTitle:"Overall Reading",
+statusInit:"Write your question, choose a spread, then shuffle and draw.",
+statusShuffling:"Shuffling... Think your question through once more in your mind.", statusShuffled:"Shuffled. When you're ready, tap Draw.",
+statusDrawn:"Cards drawn — scroll down for your reading. Tap any card to flip it.",
+noQuestion:"(No question written)", noQuestionLong:"(no specific question)",
+yourQuestion:"Your question: ", thisSpread:"Spread: ",
+copied:"Copied — paste it somewhere to save it.", copyQuestion:"Question: ",
+elementNames:{wands:"Wands", cups:"Cups", swords:"Swords", pentacles:"Pentacles"}
+}
+};
+function ui(){ return UI[lang]; }
+
+/* ============ 状态与元素 ============ */
+var $ = function(id){ return document.getElementById(id);};
+var currentSpread = "time";
+var allowReversed = true;
+var lastReading = null;
+var history = [];
+function setStatus(t){ $("stageStatus").textContent = t;}
+function spreadLabel(id){ return isEn() ? SPREADS_EN[id].label : SPREADS[id].label; }
+
+var spreadBtns = document.querySelectorAll(".spread");
+spreadBtns.forEach(function(btn){
+btn.addEventListener("click", function(){
+spreadBtns.forEach(function(b){ b.setAttribute("aria-pressed","false");});
+btn.setAttribute("aria-pressed","true");
+currentSpread = btn.getAttribute("data-spread");
+setStatus(L("已选「" + SPREADS[currentSpread].label + "」，在心里默念问题，然后抽牌。", "'" + SPREADS_EN[currentSpread].label + "' selected. Repeat your question in your mind, then draw."));
+});
+});
+document.querySelectorAll(".chip").forEach(function(chip){
+chip.addEventListener("click", function(){
+$("question").value = isEn() ? chip.getAttribute("data-q-en") : chip.getAttribute("data-q");
+$("question").focus();
+});
+});
+$("revToggle").addEventListener("click", function(){
+allowReversed = !allowReversed;
+this.setAttribute("aria-pressed", allowReversed ? "true" : "false");
+this.textContent = allowReversed ? ui().revOn : ui().revOff;
+});
+function shuffleArray(a){
+for (var i = a.length - 1; i > 0; i--){
+var j = Math.floor(Math.random() * (i + 1));
+var t = a[i]; a[i] = a[j]; a[j] = t;
+}
+return a;
+}
+$("shuffleBtn").addEventListener("click", function(){
+var stack = $("deckStack");
+stack.classList.add("shuffling");
+setStatus(ui().statusShuffling);
+setTimeout(function(){ stack.classList.remove("shuffling"); setStatus(ui().statusShuffled);}, 1400);
+});
+$("drawBtn").addEventListener("click", draw);
+$("againBtn").addEventListener("click", function(){
+window.scrollTo({ top: 0, behavior: "smooth"});
+$("question").focus();
+});
+function draw(){
+var spread = SPREADS[currentSpread];
+var spreadEn = SPREADS_EN[currentSpread];
+var need = spread.positions.length;
+var pool = shuffleArray(DECK.slice());
+var drawn = pool.slice(0, need).map(function(card, i){
+return { card: card, pos: spread.positions[i], posZh: spread.positions[i], posEn: spreadEn.positions[i], reversed: allowReversed && Math.random() < 0.32};
+});
+lastReading = { question: $("question").value.trim(), spreadId: currentSpread, spreadLabel: spread.label, spreadLabelEn: spreadEn.label, drawn: drawn, time: new Date() };
+renderReading(lastReading, false);
+history.unshift(lastReading);
+renderHistory();
+setStatus(ui().statusDrawn);
+}
+function displayPos(d){ return isEn() ? d.posEn : d.posZh; }
+function renderReading(r, skipScroll){
+$("resultSection").style.display = "block";
+var label = isEn() ? r.spreadLabelEn : r.spreadLabel;
+$("resultQuestion").textContent = r.question ? ui().yourQuestion + r.question + " (" + label + ")" : ui().thisSpread + label + ui().noQuestionLong;
+var row = $("drawnRow");
+row.className = "drawn" + (r.drawn.length === 5 ? " five" : "");
+row.innerHTML = "";
+var list = $("readingList");
+list.innerHTML = "";
+r.drawn.forEach(function(d, i){
+var pos = displayPos(d);
+var slot = document.createElement("div");
+slot.className = "slot";
+var symbolHtml = d.card.svg ? d.card.svg : '<span class="glyph">' + d.card.glyph + "</span>";
+slot.innerHTML =
+'<div class="pos">' + escapeHtml(pos) + "</div>" +
+'<div class="tcard" role="button" tabindex="0" aria-label="' + escapeHtml(pos) + ": " + escapeHtml(cardName(d.card)) + " " + (d.reversed ? ui().reversedTag : ui().uprightTag) + '">' +
+'<div class="tcard-inner">' +
+'<div class="face back">☾ ★ ☽</div>' +
+'<div class="face front' + (d.reversed ? " reversed-art" : "") + '">' +
+'<div class="num">' + d.card.num + "</div>" +
+'<div class="symbol">' + symbolHtml + "</div>" +
+'<div class="cname">' + escapeHtml(cardName(d.card)) + "</div>" +
+'<div class="ename">' + escapeHtml(cardSubName(d.card)) + "</div>" +
+"</div></div></div>" +
+'<div class="under"><span class="badge' + (d.reversed ? " rev" : "") + '">' + (d.reversed ? ui().reversed : ui().upright) + '</span></div>' +
+'<div class="tap-hint">' + ui().tapHint + "</div>";
+row.appendChild(slot);
+var tcard = slot.querySelector(".tcard");
+setTimeout(function(){ tcard.classList.add("flipped");}, 350 + i * 450);
+function flipBack(){ tcard.classList.toggle("flipped"); }
+tcard.addEventListener("click", flipBack);
+tcard.addEventListener("keydown", function(ev){ if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); flipBack();}});
+var item = document.createElement("div");
+item.className = "reading-item";
+var kwHtml = cardKw(d.card).map(function(k){ return "<span>" + escapeHtml(k) + "</span>";}).join("");
+var tip = isEn() ? (POS_TIP_EN[d.posEn] || "") : (POS_TIP[d.posZh] || "");
+item.innerHTML =
+"<h3><span class='pos-tag'>" + escapeHtml(pos) + "</span>" + escapeHtml(cardName(d.card)) +
+"<span class='rev-tag'>" + (d.reversed ? ui().reversedTag : ui().uprightTag) + "</span></h3>" +
+'<div class="kw">' + kwHtml + "</div>" +
+"<p>" + escapeHtml(cardText(d.card, d.reversed)) + "</p>" +
+"<p><b>" + ui().posPrefix + "</b>" + escapeHtml(tip) + "</p>";
+list.appendChild(item);
+});
+$("summaryBox").innerHTML = buildSummary(r);
+if (!skipScroll) setTimeout(function(){ $("resultSection").scrollIntoView({ behavior: "smooth", block: "start"});}, 200);
+}
+function buildSummary(r){
+var majors = r.drawn.filter(function(d){ return d.card.major;}).length;
+var revs = r.drawn.filter(function(d){ return d.reversed;}).length;
+var suitCount = {};
+r.drawn.forEach(function(d){ if (d.card.suit) suitCount[d.card.suit] = (suitCount[d.card.suit] || 0) + 1;});
+var domSuit = null, domN = 0;
+Object.keys(suitCount).forEach(function(k){ if (suitCount[k] > domN){ domN = suitCount[k]; domSuit = k;}});
+var lines = [];
+if (!isEn()){
+if (majors > 0){
+lines.push("<p><b>大阿卡纳 " + majors + " 张：</b>" + (majors >= Math.ceil(r.drawn.length / 2) ? "这件事在你的人生里分量不轻，涉及的可能是方向和阶段，而不只是小事的输赢。" : "大主题有出现，但主导权还在日常层面，你的具体行动比命运感更重要。") + "</p>");
+} else {
+lines.push("<p><b>全是小阿卡纳：</b>这件事主要在日常层面运作，没有宏大叙事，靠的是你一步步的具体处理。</p>");
+}
+if (domSuit && domN >= 2){
+var s = SUITS[domSuit];
+lines.push("<p><b>主导元素是" + s.el + "（" + s.cn + "）：</b>这次牌面主要在讲" + s.theme + "，看问题时先从这个角度切入。</p>");
+}
+if (allowReversed){
+lines.push("<p><b>逆位 " + revs + " 张：</b>" + (revs === 0 ? "能量整体是顺畅外放的，想到就可以去做。" : revs >= Math.ceil(r.drawn.length / 2) ? "不少能量卡在内部或被延迟，先处理内在的结，再谈推进，急不得。" : "有一两处卡点，点出来反而是好事，绕过去不如正视它。") + "</p>");
+}
+var last = r.drawn[r.drawn.length - 1];
+lines.push("<p><b>收尾的牌是「" + last.card.name + (last.reversed ? "·逆位" : "") + "」（" + last.posZh + "）：</b>整组牌最后落在" + last.card.kw[0] + "上。记住这张牌的关键词，接下来一周留意它在生活里出现的方式。</p>");
+} else {
+if (majors > 0){
+lines.push("<p><b>Major Arcana: " + majors + " card" + (majors > 1 ? "s" : "") + ":</b> " + (majors >= Math.ceil(r.drawn.length / 2) ? "This matter carries real weight in your life — it is likely about direction and life stage, not just small wins and losses." : "Big themes are present, but the steering wheel is still at the everyday level — your concrete actions matter more than a sense of fate.") + "</p>");
+} else {
+lines.push("<p><b>All Minor Arcana:</b> This matter operates mainly at the everyday level, with no grand narrative — it comes down to handling it step by step.</p>");
+}
+if (domSuit && domN >= 2){
+var se = SUITS[domSuit];
+var elEn = {wands:"Fire", cups:"Water", swords:"Air", pentacles:"Earth"}[domSuit];
+lines.push("<p><b>Dominant element: " + elEn + " (" + se.en + "):</b> This reading is mainly about " + se.themeEn + " — approach the question from this angle first.</p>");
+}
+if (allowReversed){
+lines.push("<p><b>Reversed: " + revs + " card" + (revs === 1 ? "" : "s") + ":</b> " + (revs === 0 ? "The energy is flowing outward smoothly overall — when you think of it, you can act on it." : revs >= Math.ceil(r.drawn.length / 2) ? "Much of the energy is stuck inside or delayed. Untangle the inner knots first before pushing ahead — this can't be rushed." : "There are one or two sticking points. Naming them is a good thing — face them rather than going around.") + "</p>");
+}
+var lastEn = r.drawn[r.drawn.length - 1];
+lines.push("<p><b>Closing card: '" + lastEn.card.en + (lastEn.reversed ? " (Reversed)" : "") + "' (" + lastEn.posEn + "):</b> The whole spread lands on " + lastEn.card.kwEn[0] + ". Remember this card's keyword, and watch how it shows up in your life over the next week.</p>");
+}
+return "<h3>" + ui().summaryTitle + "</h3>" + lines.join("");
+}
+function renderHistory(){
+if (!history.length) return;
+$("historySection").style.display = "block";
+var box = $("historyList");
+box.innerHTML = "";
+history.forEach(function(r){
+var names = r.drawn.map(function(d){ return cardName(d.card) + (d.reversed ? (isEn() ? " (Rev)" : "(逆)") : "");}).join(" · ");
+var hh = ("0" + r.time.getHours()).slice(-2), mm = ("0" + r.time.getMinutes()).slice(-2);
+var div = document.createElement("div");
+div.className = "history-item";
+div.innerHTML = '<span class="hq">' + (r.question ? escapeHtml(r.question) : ui().noQuestion) + '</span>' +
+'<span class="hc">' + escapeHtml(isEn() ? r.spreadLabelEn : r.spreadLabel) + ": " + escapeHtml(names) + "</span>" +
+"<time>" + hh + ":" + mm + "</time>";
+box.appendChild(div);
+});
+}
+function escapeHtml(s){
+return String(s).replace(/[&<>"']/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[c];});
+}
+$("copyBtn").addEventListener("click", function(){
+if (!lastReading) return;
+var r = lastReading;
+var lines = [];
+lines.push(isEn() ? r.spreadLabelEn : r.spreadLabel);
+lines.push(ui().copyQuestion + (r.question || ui().noQuestion));
+r.drawn.forEach(function(d){
+lines.push("");
+lines.push(displayPos(d) + " | " + cardName(d.card) + " (" + (d.reversed ? ui().reversedTag : ui().uprightTag) + ")");
+lines.push((isEn() ? "Keywords: " : "关键词：") + cardKw(d.card).join(isEn() ? ", " : "、"));
+lines.push(cardText(d.card, d.reversed));
+});
+var text = lines.join("\n");
+function done(){ $("copyOk").textContent = ui().copied; setTimeout(function(){ $("copyOk").textContent = "";}, 3000);}
+if (navigator.clipboard && navigator.clipboard.writeText){
+navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text); done();});
+} else { fallbackCopy(text); done();}
+});
+function fallbackCopy(text){
+var ta = document.createElement("textarea");
+ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+document.body.appendChild(ta); ta.select();
+try { document.execCommand("copy");} catch (e) {}
+document.body.removeChild(ta);
+}
+
+/* ============ 语言切换 ============ */
+function applyLanguage(){
+var t = ui();
+document.documentElement.lang = isEn() ? "en" : "zh-CN";
+document.title = t.docTitle;
+$("langZh").setAttribute("aria-pressed", isEn() ? "false" : "true");
+$("langEn").setAttribute("aria-pressed", isEn() ? "true" : "false");
+$("titleMain").textContent = t.titleMain;
+$("titleSub").textContent = t.titleSub;
+$("tagline").innerHTML = t.tagline;
+$("qTitle").textContent = t.qTitle;
+$("qHint").textContent = t.qHint;
+$("qLabel").textContent = t.qLabel;
+$("question").setAttribute("placeholder", t.qPlaceholder);
+$("topicsBox").setAttribute("aria-label", t.topicsLabel);
+document.querySelectorAll(".chip").forEach(function(chip, i){ chip.textContent = t.chips[i] || chip.textContent; });
+$("sTitle").textContent = t.sTitle;
+$("sHint").textContent = t.sHint;
+$("spreadsBox").setAttribute("aria-label", t.spreadsLabel);
+var uiSpreads = SPREAD_UI[lang];
+document.querySelectorAll(".spread").forEach(function(btn){
+var info = uiSpreads[btn.getAttribute("data-spread")];
+if (info){ btn.querySelector("b").textContent = info.b; btn.querySelector("small").textContent = info.s; }
+});
+$("revToggle").textContent = allowReversed ? t.revOn : t.revOff;
+$("revHint").textContent = t.revHint;
+$("dTitle").textContent = t.dTitle;
+$("ritualText").textContent = t.ritual;
+$("shuffleBtn").textContent = t.shuffle;
+$("drawBtn").textContent = t.draw;
+$("rTitle").textContent = t.rTitle;
+$("againBtn").textContent = t.again;
+$("copyBtn").textContent = t.copy;
+$("hTitle").textContent = t.hTitle;
+$("hHint").textContent = t.hHint;
+$("gTitle").textContent = t.gTitle;
+$("gHint").textContent = t.gHint;
+document.querySelectorAll(".guide-item").forEach(function(el, i){ if (t.guide[i]) el.innerHTML = t.guide[i]; });
+document.querySelectorAll(".divination-label").forEach(function(el){ el.textContent = t.divination; });
+$("footerText").innerHTML = t.footer;
+if (lastReading){ renderReading(lastReading, true); renderHistory(); }
+}
+function setLang(next){
+if (lang === next) return;
+lang = next;
+applyLanguage();
+setStatus(ui().statusInit);
+}
+$("langZh").addEventListener("click", function(){ setLang("zh"); });
+$("langEn").addEventListener("click", function(){ setLang("en"); });
+
+setStatus(ui().statusInit);
+})();
+</script>
+</body>
+</html>
